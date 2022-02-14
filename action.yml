@@ -22,10 +22,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: montudor/action-zip@v1.0.0
-      with:
-        args: zip -qq -r ${{ inputs.version }}.zip ${{ inputs.path }}
+    # - uses: montudor/action-zip@v1.0.0
+    #   with:
+    #     args: zip -qq -r ${{ inputs.version }}.zip ${{ inputs.path }}
 
+    - name: Zip
+      shell: bash
+      run: zip ${{ inputs.version }}.zip ${{ inputs.path }}
+      
     - run: aws s3 sync ${{ inputs.path }} s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ inputs.version }}.zip
       shell: bash
       name: Upload to S3
