@@ -10,6 +10,15 @@ inputs:
   path:
     description: 'Path to folder that should be uploaded'
     required: true
+  aws-access-key-id:
+    required: true
+    description: 'AWS access key ID'
+  aws-secret-access-key:
+    required: true
+    description: 'AWS secret access key'
+  aws-artifact-bucket:
+    required: true
+    description: 'Bucket that AWS artifact should be stored in'
 runs:
   using: "composite"
   steps:
@@ -17,10 +26,10 @@ runs:
       with:
         args: zip -qq -r ${{ inputs.version }}.zip ${{ inputs.path }}
 
-    - run: aws s3 sync ${{ inputs.path }} s3://${{ secrets.AWS_ARTIFACT_BUCKET }}/github-actions/tfso/${{ inputs.project-name }}/${{ inputs.version }}.zip
+    - run: aws s3 sync ${{ inputs.path }} s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ inputs.version }}.zip
       shell: bash
       name: Upload to S3
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_ACCESS_KEY_ID: ${{ input.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
         AWS_DEFAULT_REGION: 'eu-west-1'
