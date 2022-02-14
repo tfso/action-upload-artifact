@@ -30,6 +30,6 @@ runs:
       shell: bash
       name: Upload to S3
       env:
-        AWS_ACCESS_KEY_ID: ${{ input.aws-access-key-id }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
         AWS_DEFAULT_REGION: 'eu-west-1'
