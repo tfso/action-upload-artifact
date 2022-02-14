@@ -18,6 +18,7 @@ runs:
         args: zip -qq -r ${{ inputs.version }}.zip ${{ inputs.path }}
 
     - run: aws s3 sync ${{ inputs.path }} s3://${{ secrets.AWS_ARTIFACT_BUCKET }}/github-actions/tfso/${{ inputs.project-name }}/${{ inputs.version }}.zip
+      shell: bash
       name: Upload to S3
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
