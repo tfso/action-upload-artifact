@@ -38,6 +38,6 @@ runs:
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
         AWS_DEFAULT_REGION: 'eu-west-1'
     
-    - run: ${{ inputs.path }}/${{ env.ARTIFACT_NAME }}.zip
+    - run: rm ${{ inputs.path }}/${{ env.ARTIFACT_NAME }}.zip
       shell: bash
       name: Remove artifact
