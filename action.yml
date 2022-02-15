@@ -28,7 +28,7 @@ runs:
 
     - name: Zip
       shell: bash
-      run: zip ${{ env.ARTIFACT_NAME }}.zip ${{ inputs.path }}
+      run: zip -r ${{ env.ARTIFACT_NAME }}.zip ${{ inputs.path }}/*
 
     - run: aws s3 cp ${{ env.ARTIFACT_NAME }}.zip s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
       shell: bash
