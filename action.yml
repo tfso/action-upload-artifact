@@ -30,7 +30,7 @@ runs:
       shell: bash
       run: zip ${{ env.ARTIFACT_NAME }}.zip ${{ inputs.path }}
 
-    - run: aws s3 sync ${{ env.ARTIFACT_NAME }} s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
+    - run: aws s3 sync ${{ env.ARTIFACT_NAME }}.zip s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
       shell: bash
       name: Upload to S3
       env:
