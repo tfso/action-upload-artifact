@@ -30,10 +30,14 @@ runs:
       shell: bash
       run: (cd ${{ inputs.path }} && zip -r ${{ env.ARTIFACT_NAME }}.zip .)
 
-    - run: aws s3 cp ${{ env.ARTIFACT_NAME }}.zip s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
+    - run: aws s3 cp ${{ inputs.path }}/${{ env.ARTIFACT_NAME }}.zip s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
       shell: bash
       name: Upload to S3
       env:
         AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
         AWS_DEFAULT_REGION: 'eu-west-1'
+    
+    - run: ${{ inputs.path }}/${{ env.ARTIFACT_NAME }}.zip
+      shell: bash
+      name: Remove artifact
