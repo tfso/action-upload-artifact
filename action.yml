@@ -22,8 +22,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/github-script@v6
-      name: Rename (replace special chars with dash)
+    - name: Rename (replace special chars with dash)
+      shell: bash
       run: echo "ARTIFACT_NAME=$(echo 'hello.world' | sed 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
 
     - name: Zip
