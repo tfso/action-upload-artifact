@@ -30,7 +30,7 @@ runs:
       shell: bash
       run: (cd ${{ inputs.path }} && zip -r ${{ env.ARTIFACT_NAME }}.zip .)
 
-    - run: aws s3 cp ${{ inputs.path }}/${{ env.ARTIFACT_NAME }}.zip s3://${{ inputs.aws-artifact-bucket }}/github-actions/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
+    - run: aws s3 cp ${{ inputs.path }}/${{ env.ARTIFACT_NAME }}.zip s3://${{ inputs.aws-artifact-bucket }}/github-artifacts/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip
       shell: bash
       name: Upload to S3
       env:
