@@ -1,0 +1,50 @@
+name: 'Download artifact'
+description: 'Download artifacts from S3 deployment bucket'
+inputs:
+  project-name:
+    description: 'Name of the project to download'
+    required: true
+  version: 
+    description: 'Version of the project to download'
+    required: false
+  path:
+    description: 'Path where the downloaded items should be unzipped'
+    default: './artifact'
+    required: true
+  aws-access-key-id:
+    required: true
+    description: 'AWS access key ID'
+  aws-secret-access-key:
+    required: true
+    description: 'AWS secret access key'
+  aws-artifact-bucket:
+    required: true
+    description: 'Bucket that AWS artifact should be stored in'
+runs:
+  using: "composite"
+  steps:
+    - name: Rename (replace special chars with dash)
+      shell: bash
+      run: echo "ARTIFACT_NAME=$(echo ${{ inputs.version }} | sed 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
+
+    - name: Temp dir
+      shell: bash
+      run: mkdir temp${{ inputs.project-name }}${{ github.run_id }}
+
+    - run: aws s3 cp s3://${{ inputs.aws-artifact-bucket }}/github-artifacts/tfso/${{ inputs.project-name }}/${{ env.ARTIFACT_NAME }}.zip temp${{ inputs.project-name }}${{ github.run_id }}/${{ env.ARTIFACT_NAME }}.zip
+      shell: bash
+      name: Upload to S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+        AWS_DEFAULT_REGION: 'eu-west-1'
+
+    - name: Unzip
+      shell: bash
+      run: |
+        mkdir -p  ${{ inputs.path }}
+        unzip temp${{ inputs.project-name }}${{ github.run_id }}/${{ env.ARTIFACT_NAME }}.zip -d ${{ inputs.path }}
+
+    - run: rm -r temp${{ inputs.project-name }}${{ github.run_id }}
+      shell: bash
+      name: Remove zipped file
